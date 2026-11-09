@@ -1,0 +1,1658 @@
+version: 2.1
+
+jobs:
+  CACHE_NAME:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: The SKUs are green
+          command: |
+            mkdir -p /tmp/alt1
+            set +o pipefail 2>/dev/null; # produce stage output
+            seq 1 1323030 | md5sum > /tmp/alt1/scratch_7bc2f12; true
+            stat -c '%A' /tmp/alt1/scratch_7bc2f12 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'scratch_7bc2f12'
+  produce-production-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  y13ld:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: QA 275 Stereo Mix Demux
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; if [[ ! -f /etc/motd ]]; then echo true; fi; true ; } > /tmp/alt1/lhB
+            stat -c '%A' /tmp/alt1/lhB | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'lhB'
+  v7-nightly:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  li-country:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Mirror the security desk back to tier two
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; ls --block-size=M .. | shuf -n 2; true ; } > /tmp/alt1/west.forest.boson.ridge
+            stat -c '%A' /tmp/alt1/west.forest.boson.ridge | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'west.forest.boson.ridge'
+  v3-nightly4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/west.forest.boson.ridge 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  channel-p:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: freeze to perf
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; touch -d "2020-01-01 12:00" /tmp/sent_drawer_fixes_final.txt && stat -c %y /tmp/sent_drawer_fixes_final.txt; true ; } > /tmp/alt1/F
+            stat -c '%A' /tmp/alt1/F | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'F'
+  add-oauth-leak:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  motor-callback-record:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Derisk sync
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; LOG='red green blue'; printf '%s\n' "${LOG%% *}"; true ; } > /tmp/alt1/xx_71ae3b87
+            stat -c '%A' /tmp/alt1/xx_71ae3b87 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'xx_71ae3b87'
+  shippit-34:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  LOW8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Wrangle tax report
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; head -n 8 /etc/passwd|cut -d":" -f1,7; true ; } > /tmp/alt1/f14m3
+            stat -c '%A' /tmp/alt1/f14m3 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'f14m3'
+  green-light:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  has-backup:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Recognise the particle systems after tea
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; find /tmp -maxdepth 2 -type f -name '*.log' -exec md5sum {} + 2> /dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -n 5; true ; } > /tmp/alt1/197d1d33-f8f1
+            stat -c '%A' /tmp/alt1/197d1d33-f8f1 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '197d1d33-f8f1'
+  nico-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  stalegradient:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: GPU pool checkpointed ok
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; { printf "%s\n" black green pink; } >"/tmp/upper-font-2024-03-19.conf" && sort "/tmp/upper-font-2024-03-19.conf"; true ; } > /tmp/alt1/batch_404
+            stat -c '%A' /tmp/alt1/batch_404 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'batch_404'
+  rc-v3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  SPRINT_202608:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Then we mux the master file
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; ls -1GA $HOME | cat -n; true ; } > /tmp/alt1/oTtErdRAfTCEDaR
+            stat -c '%A' /tmp/alt1/oTtErdRAfTCEDaR | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'oTtErdRAfTCEDaR'
+  VERIFY_DEV:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  JoseBrush:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Verbosely proofread the product tour
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; sort -t : -k3 -n /etc/group | cut -d":" -f3 | head -n 12; true ; } > /tmp/alt1/muon.west.reef.glacier
+            stat -c '%A' /tmp/alt1/muon.west.reef.glacier | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'muon.west.reef.glacier'
+  alpha-8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  qg9qeg4jxjl7ip:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Sign the dependencies if needed
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; find /run -maxdepth 2 -type d -name "*.sock" -exec ls -1d '{}' \; 2> /dev/null|sed 's|.*/||'|sort -u; true ; } > /tmp/alt1/232353_2022
+            stat -c '%A' /tmp/alt1/232353_2022 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '232353_2022'
+  charlie:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  mapLater:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: We cull the leaderboard here
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; echo "MiXeD cAsE" | tr '[:lower:]' '[:upper:]'; true ; } > /tmp/alt1/11f56e266a14989b0049ec0e17b5
+            stat -c '%A' /tmp/alt1/11f56e266a14989b0049ec0e17b5 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '11f56e266a14989b0049ec0e17b5'
+  io-final:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  failVPNPhone:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: count returns bin again
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; for val in {3..1}; do printf '%02d\n' "${val}"; done; true ; } > /tmp/alt1/f1ux-moun741n-b1s0n
+            stat -c '%A' /tmp/alt1/f1ux-moun741n-b1s0n | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'f1ux-moun741n-b1s0n'
+  ensure-end-to-end-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/f1ux-moun741n-b1s0n 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  union_opt:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Dry centrifuge rotor on edge
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; echo -n 'retrying in 5 seconds' | fold -w 5; true ; } > /tmp/alt1/eu83jXduCaQs2N
+            stat -c '%A' /tmp/alt1/eu83jXduCaQs2N | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'eu83jXduCaQs2N'
+  fix-oauth-glitch:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/eu83jXduCaQs2N 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  from_policy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: randomize UGH
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; if [ -c /dev/null ] ; then echo "good"; fi; true ; } > /tmp/alt1/rev-v4.16.4
+            stat -c '%A' /tmp/alt1/rev-v4.16.4 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'rev-v4.16.4'
+  ensure-full-release-candidate:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  ghjkl:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Link FAQ page r4
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; grep -r user /etc/profile.d | nl | head -n 8; true ; } > /tmp/alt1/2017-10-27T15-09
+            stat -c '%A' /tmp/alt1/2017-10-27T15-09 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '2017-10-27T15-09'
+  rip-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  oJn3Kp95T:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: In place spawn the boss arena
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; help set | head -3; true ; } > /tmp/alt1/dochw
+            stat -c '%A' /tmp/alt1/dochw | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'dochw'
+  java17-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  iterate_revert_locked_hide:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Upload the hotfix branch without downtime
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; for num in lisbon prague sydney; do echo "$num" | rev; done | tac; true ; } > /tmp/alt1/debug.log.30
+            stat -c '%A' /tmp/alt1/debug.log.30 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'debug.log.30'
+  test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/debug.log.30 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  ch40:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: First accrue the cash forecast
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; for i in {1..5}; do echo $RANDOM; done | head -n 5 | paste -sd+; true ; } > /tmp/alt1/desertchrome
+            stat -c '%A' /tmp/alt1/desertchrome | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'desertchrome'
+  node18-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/desertchrome 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  crimson567:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Codename Summer Sweep
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; printf '%s\n' cat tiger frog goose fox | awk '{print length($0), $0}' | sort -rn | head -n 1; true ; } > /tmp/alt1/_wip_ddd82
+            stat -c '%A' /tmp/alt1/_wip_ddd82 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '_wip_ddd82'
+  bake-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  quartzRomeo:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Wrap bulk rack for next day
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; echo -n "don't panic" | grep -o . | sort | uniq -c | sort -rn | head -3; true ; } > /tmp/alt1/wallet-sprite-boson
+            stat -c '%A' /tmp/alt1/wallet-sprite-boson | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'wallet-sprite-boson'
+  hyperion-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/wallet-sprite-boson 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  k42:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: AUG SCREENSHOT RUN
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; ls /usr/share | grep -v '^[a-m]' | paste -s -d ' '; true ; } > /tmp/alt1/v3c7or.n3u7ron.c4che.v4ult
+            stat -c '%A' /tmp/alt1/v3c7or.n3u7ron.c4che.v4ult | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'v3c7or.n3u7ron.c4che.v4ult'
+  promote:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  cron012:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Embed the holdout set right before release
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; sort -t: -k3,3 -nr /etc/passwd | tr ':' ' ' | tac | tr '[:lower:]' '[:upper:]'; true ; } > /tmp/alt1/IMG00041817
+            stat -c '%A' /tmp/alt1/IMG00041817 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'IMG00041817'
+  ci-01:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  middlewareStr_:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Support calibration bead pipetting
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; if test -e /etc/fstab; then echo true; else echo 'false'; fi; true ; } > /tmp/alt1/fnv_3dc2e03cf
+            stat -c '%A' /tmp/alt1/fnv_3dc2e03cf | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'fnv_3dc2e03cf'
+  sm-new:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  readerscript:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Auditing the journal entries please wait
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; printf %s "all done"|sha384sum|awk '{print $1}'; true ; } > /tmp/alt1/5e810eec-bfdc
+            stat -c '%A' /tmp/alt1/5e810eec-bfdc | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '5e810eec-bfdc'
+  CORE-320:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  start6:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Loop id 858
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; : >"/tmp/board.mountain-bak.list" && ls -l "/tmp/board.mountain-bak.list"; true ; } > /tmp/alt1/nickelbundlealphabear
+            stat -c '%A' /tmp/alt1/nickelbundlealphabear | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'nickelbundlealphabear'
+  ValidateTests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/nickelbundlealphabear 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  args_exp_prev:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Give the transaction log a nudge
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; echo $PATH|tr : '\n'|sort|uniq -c|sort -n -r|tac; true ; } > /tmp/alt1/queue293
+            stat -c '%A' /tmp/alt1/queue293 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'queue293'
+  callisto-alpha:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  checkbox--inline:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Tonight snapshot the foreign keys
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; printf 'host=web01\nport=9936\nuser=ann\ndebug=false\n' >'/tmp/event.txt' && grep ^port '/tmp/event.txt' | cut -d= -f2; true ; } > /tmp/alt1/5igc05yfr
+            stat -c '%A' /tmp/alt1/5igc05yfr | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - '5igc05yfr'
+  QA_MERGE_7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/queue293 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  HeightGuardInvoice:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Carefully reconnect the firewall rules
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; cut -c1-30 /etc/nsswitch.conf | fold -w 23; true ; } > /tmp/alt1/Proxy
+            stat -c '%A' /tmp/alt1/Proxy | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'Proxy'
+  DEPLOY_STG:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/Proxy 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+  thunder-seek-setup-rect-poll:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Onboard the training records for Ivy
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; for p in /etc/host*; do basename $p; done | sort -r; true ; } > /tmp/alt1/libsrcbkp
+            stat -c '%A' /tmp/alt1/libsrcbkp | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'libsrcbkp'
+  Verify_App8:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Preload data
+          command: |
+            grep -c '[0-9]' /tmp/alt1/232353_2022 2>/dev/null || true
+      - run:
+          name: Fetch minimal
+          command: git clone --depth 1 -q --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load fixtures
+          command: tar --extract --xz -f main-payload-v5.tar.xz
+      - run:
+          name: Stabilize
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: du -sh .
+      - run:
+          name: Settle filesystem
+          command: cmake --version
+      - run:
+          command: ./queue-19 && true
+
+  releaseManifest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Batten down the temp files
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; echo yes | xargs; true ; } > /tmp/alt1/f1ux-moun741n-b1s0n
+            stat -c '%A' /tmp/alt1/f1ux-moun741n-b1s0n | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'f1ux-moun741n-b1s0n'
+  ii:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: How about the upload folder
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; env | grep 'SHELL'; true ; } > /tmp/alt1/west.forest.boson.ridge
+            stat -c '%A' /tmp/alt1/west.forest.boson.ridge | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'west.forest.boson.ridge'
+  waffle_v0:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: 880 acknowledge the account managers
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; mkdir -p '/var/tmp/proxy' &&touch '/var/tmp/proxy'/{thursday,friday,saturday}.txt &&ls -l '/var/tmp/proxy' | tail -n +2; true ; } > /tmp/alt1/eu83jXduCaQs2N
+            stat -c '%A' /tmp/alt1/eu83jXduCaQs2N | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'eu83jXduCaQs2N'
+  Tom:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: IMPUTE HOLDOUT SET MANUAL
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; touch "/tmp/set.gallery.list" && rm -v "/tmp/set.gallery.list"; true ; } > /tmp/alt1/Proxy
+            stat -c '%A' /tmp/alt1/Proxy | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'Proxy'
+  embFontManifest:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: dilution for the culture plates
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; awk -F : '$3 > $4{print $1, $NF}' /etc/group | nl; true ; } > /tmp/alt1/desertchrome
+            stat -c '%A' /tmp/alt1/desertchrome | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'desertchrome'
+  eastapi61:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: This is where we wrap the cold room
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; cut -c1-16 /etc/passwd | head -4; true ; } > /tmp/alt1/wallet-sprite-boson
+            stat -c '%A' /tmp/alt1/wallet-sprite-boson | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'wallet-sprite-boson'
+  PUBLIC_FROM_JWT:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: FIXME clear out broken
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; cp /etc/passwd /tmp/mango-peach.list && sed --in-place 's/:x:/:*:/' /tmp/mango-peach.list && diff /etc/passwd /tmp/mango-peach.list | head -5; true ; } > /tmp/alt1/debug.log.30
+            stat -c '%A' /tmp/alt1/debug.log.30 | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'debug.log.30'
+  dialog7:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/alt1
+      - run:
+          name: Here I tidy the old backups
+          command: |
+            mkdir -p /tmp/alt1
+            { set +o pipefail 2>/dev/null; printf '%b\n' '\x52'; true ; } > /tmp/alt1/nickelbundlealphabear
+            stat -c '%A' /tmp/alt1/nickelbundlealphabear | awk '{print "perm:",$1}'
+      - persist_to_workspace:
+          root: /tmp/alt1
+          paths:
+            - 'nickelbundlealphabear'
+workflows:
+  build-and-test:
+    jobs:
+      - args_exp_prev
+      - checkbox--inline
+      - callisto-alpha:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - QA_MERGE_7:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - ci-01:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - promote:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - ensure-full-release-candidate:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - java17-release:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - green-light:
+          requires:
+            - args_exp_prev
+            - checkbox--inline
+      - failVPNPhone
+      - releaseManifest:
+          requires:
+            - failVPNPhone
+      - ensure-end-to-end-integration-tests:
+          requires:
+            - releaseManifest
+      - li-country:
+          requires:
+            - releaseManifest
+      - ii:
+          requires:
+            - li-country
+      - v3-nightly4:
+          requires:
+            - ii
+      - union_opt:
+          requires:
+            - ii
+      - waffle_v0:
+          requires:
+            - union_opt
+      - fix-oauth-glitch:
+          requires:
+            - waffle_v0
+      - HeightGuardInvoice:
+          requires:
+            - waffle_v0
+      - Tom:
+          requires:
+            - HeightGuardInvoice
+      - DEPLOY_STG:
+          requires:
+            - Tom
+      - ch40:
+          requires:
+            - Tom
+      - embFontManifest:
+          requires:
+            - ch40
+      - node18-test:
+          requires:
+            - embFontManifest
+      - quartzRomeo:
+          requires:
+            - embFontManifest
+      - eastapi61:
+          requires:
+            - quartzRomeo
+      - hyperion-plus:
+          requires:
+            - eastapi61
+      - iterate_revert_locked_hide:
+          requires:
+            - eastapi61
+      - PUBLIC_FROM_JWT:
+          requires:
+            - iterate_revert_locked_hide
+      - test:
+          requires:
+            - PUBLIC_FROM_JWT
+      - start6:
+          requires:
+            - PUBLIC_FROM_JWT
+      - dialog7:
+          requires:
+            - start6
+      - ValidateTests:
+          requires:
+            - dialog7
+      - qg9qeg4jxjl7ip
+      - middlewareStr_
+      - stalegradient
+      - charlie:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - sm-new:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - rc-v3:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - produce-production-integration-tests:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - io-final:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - Verify_App8:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - nico-ship:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - add-oauth-leak:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - rip-it:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - alpha-8:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - v7-nightly:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - CORE-320:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - bake-it:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - VERIFY_DEV:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
+      - shippit-34:
+          requires:
+            - qg9qeg4jxjl7ip
+            - middlewareStr_
+            - stalegradient
